@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿// https://github.com/jbubriski/Encryptamajig/tree/master
+
+using System.Security.Cryptography;
 
 /// <summary>
 /// A simple wrapper to the AesManaged class and the AES algorithm.
