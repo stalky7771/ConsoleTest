@@ -7,7 +7,7 @@ namespace Main.Codewars
 	{
 		private const string SIMPLE = "!@#$%^&*()_+-";
 		private const string ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,? ";
-		private static readonly int SIZE = ALPHABET.Length;
+		private static readonly int SIZE = ALPHABET.Length + 1;
 
 		public static string Decode(string p_what)
 		{
@@ -19,18 +19,18 @@ namespace Main.Codewars
 			{
 				if (!SIMPLE.Contains(s))
 				{
-					var i0 = ALPHABET.IndexOf(s);
+					var i0 = ALPHABET.IndexOf(s) - 1;
 					var rate = (decimal)BigInteger.Pow(2, offset);
 					decimal k = 0;
 					decimal k0 = 0;
-					if (rate - i0 - 1 > SIZE + 1)
+					if (rate - i0 > SIZE)
 					{
-						k0 = k = rate;
+						k0 = k = System.Math.Truncate(rate / SIZE) * 2;
 					}
 
 					while (true)
 					{
-						if ((i0 + (SIZE + 1) * k + 1) % rate == 0)
+						if ((i0 + SIZE * k + 2) % rate == 0)
 							break;
 						
 						k++;
@@ -38,12 +38,12 @@ namespace Main.Codewars
 
 					Console.WriteLine($">>> k0 = {k0}, k = {k}, {sb.ToString()}");
 
-					var i = (i0 + (SIZE + 1) * k + 1) / rate - 1;
-					i %= SIZE + 1;
+					var i = (i0 + SIZE * k + 2) / rate - 1;
+					i %= SIZE;
 					sb.Append(ALPHABET[(int)i]);
 
 					offset++;
-					offset %= SIZE;
+					offset %= (SIZE - 1);
 				}
 				else
 				{
@@ -65,9 +65,9 @@ namespace Main.Codewars
 			{
 				if (!SIMPLE.Contains(s))
 				{
-					var i0 = ALPHABET.IndexOf(s);
+					var i0 = ALPHABET.IndexOf(s) + 1;
 					var rate = (decimal)BigInteger.Pow(2, offset);
-					var i = rate * (i0 + 1) - 1;
+					var i = rate * i0 - 1;
 					i %= SIZE + 1;
 					sb.Append(ALPHABET[(int)i]);
 
@@ -88,11 +88,11 @@ namespace Main.Codewars
 		{
 			var list = new[]
 			{
-				new { strIn  = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-					  strOut = "bdhpF,82QsLirJejtNmzZKgnB3SwTyXG ?.6YIcflxVC5WE94UA1OoD70MkvRuPqHabdhpF,82QsLir" },
+				//new { strIn  = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+					//  strOut = "bdhpF,82QsLirJejtNmzZKgnB3SwTyXG ?.6YIcflxVC5WE94UA1OoD70MkvRuPqHabdhpF,82QsLir" },
 
-				//new { strIn  = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-				//	  strOut = "dhpF,82QsLirJejtNmzZKgnB3SwTyXG ?.6YIcflxVC5WE94UA1OoD70MkvRuPqHabdhp" },
+				new { strIn  = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+					  strOut = "dhpF,82QsLirJejtNmzZKgnB3SwTyXG ?.6YIcflxVC5WE94UA1OoD70MkvRuPqHabdhp" },
 
 				//new { strIn  = "!@#$%^&*()_+-",
 				//	  strOut = "!@#$%^&*()_+-" },
