@@ -1,4 +1,6 @@
-﻿using System;
+﻿//https://www.codewars.com/kata/526c7b931666d07889000a3c
+
+using System;
 using System.Drawing;
 
 namespace Main.Codewars
