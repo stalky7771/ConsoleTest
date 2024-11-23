@@ -8,7 +8,7 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			Decoder.TestAll();
+			Spiralizor.TestAll();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
