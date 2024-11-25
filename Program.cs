@@ -8,7 +8,7 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			Spiralizor.TestAll();
+			Combinatorics.TestAll();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
