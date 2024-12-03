@@ -60,24 +60,13 @@ namespace Main.Codewars
 		void eval_exp4(ref double result)
 		{
 			double temp = 0;
-			double ex = 0;
 
 			eval_exp5(ref result);
 			if (_token == "&")
 			{
 				get_token();
 				eval_exp4(ref temp);
-				ex = result;
-				if (temp == 0)
-				{
-					result = 1;
-					return;
-				}
-
-				for (var t = (int)temp - 1; t > 0; --t)
-				{
-					result *= ex;
-				}
+				result = System.Math.Pow(result, temp);
 			}
 		}
 
@@ -167,14 +156,15 @@ namespace Main.Codewars
 			//Test("-6+5", "-1");
 			//Test("6-5", "1");
 			//Test("-2+2", "0");
-			//Test("-2&2", "-4");
+			Test("-2&2", "-4");
+			//Test("2&0", "1");
 			//Test("---5*2", "-10");
 			//Test("0,01*4", "0,04");
 			//Test("((2 + 3) * (1 + 2)) * 4 & -2", "0,9375");
 			//Test("10 * 5 + 2&3", "58");
 			//Test("2 * 3 + 2 & 2 * 4", "22");
 			//Test("5-- 6", "11");
-			Test("4&-2", "0,9375");
+			//Test("4&2", "16");
 			//Test("2*3&2", "18");
 			//Test("4 & 3 & 2", "262144");
 			//Test("-5&3&2*2-1", "-3906251");
