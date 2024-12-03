@@ -44,7 +44,7 @@ namespace Main.Codewars
 			string op;
 			double temp = 0;
 
-			eval_exp4(ref result);
+			eval_exp5(ref result);
 			while ((op = _token) == "*" || op == "/")
 			{
 				get_token();
@@ -57,20 +57,20 @@ namespace Main.Codewars
 			}
 		}
 
-		void eval_exp4(ref double result)
+		void eval_exp5(ref double result)
 		{
 			double temp = 0;
 
-			eval_exp5(ref result);
+			eval_exp6(ref result);
 			if (_token == "&")
 			{
 				get_token();
-				eval_exp4(ref temp);
+				eval_exp5(ref temp);
 				result = System.Math.Pow(result, temp);
 			}
 		}
 
-		void eval_exp5(ref double result)
+		void eval_exp4(ref double result)
 		{
 			string op = string.Empty;
 
@@ -79,7 +79,7 @@ namespace Main.Codewars
 				op = _token;
 				get_token();
 			}
-			eval_exp6(ref result);
+			eval_exp5(ref result);
 			if (op == "-")
 				result = -result;
 		}
