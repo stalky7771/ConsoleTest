@@ -1,45 +1,43 @@
-﻿// https://www.codewars.com/kata/54b72c16cd7f5154e9000457
+﻿using System.Text;
 
 namespace Main.Codewars
 {
 	public class MorseCodeDecoder
 	{
-		public static string DecodeBits(string bits)
-		{
-			var cleanedBits = bits.Trim('0');
-			var rate = GetRate();
-			return cleanedBits
-				.Replace(GetDelimiter(7, "0"), "   ")
-				.Replace(GetDelimiter(3, "0"), " ")
-				.Replace(GetDelimiter(3, "1"), "-")
-				.Replace(GetDelimiter(1, "1"), ".")
-				.Replace(GetDelimiter(1, "0"), "");
+		private const string SPACE = " ";
+		private const string SPACE_LONG = "   ";
 
-			string GetDelimiter(int len, string c) => Enumerable.Range(0, len * rate).Aggregate("", (acc, _) => acc + c);
-			int GetRate() => GetLengths("0").Union(GetLengths("1")).Min();
-			IEnumerable<int> GetLengths(string del) => cleanedBits.Split(del, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Length);
+		public static string Decode(string morseCode)
+		{
+			if (string.IsNullOrEmpty(morseCode))
+				return string.Empty;
+
+			var result = new StringBuilder();
+
+			foreach (var word in morseCode.Split(SPACE_LONG, StringSplitOptions.RemoveEmptyEntries))
+			{
+				foreach (var symbol in word.Split(SPACE, StringSplitOptions.RemoveEmptyEntries))
+				{
+					result.Append(MorseCode.Get(symbol));
+				}
+				result.Append(SPACE);
+			}
+
+			return result.ToString().Trim(' ');
 		}
 
-		public static string DecodeMorse(string morseCode)
+		public static void TestAll()
 		{
-			return morseCode
-				.Split("   ")
-				.Aggregate("", (res, word) => $"{res}{ConvertWord(word)} ")
-				.Trim();
-
-			string ConvertWord(string word) => word.Split(' ').Aggregate("", (wordRes, c) => wordRes + MorseCode.Get(c));
+			Test(".... . -.--   .--- ..- -.. .", "HEY JUDE");
 		}
 
-		public static void Test()
+		private static void Test(string morseCode, string expected)
 		{
-			var message = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
-			//var message = "1";
-			//var message = "1110111";
-
-			var result = DecodeBits(message);
-			Console.WriteLine($"Expected: [.... . -.--   .--- ..- -.. .]");
-			Console.WriteLine($"Result:   [{result}]");
-			Console.WriteLine($"English:  [{DecodeMorse(result)}]");
+			var res = Decode(morseCode);
+			if (res == expected)
+				Console.WriteLine("Ok");
+			else
+				Console.WriteLine("Error");
 		}
 	}
 
@@ -65,7 +63,7 @@ namespace Main.Codewars
 			_codes.Add(".-..", "L");
 			_codes.Add("--", "M");
 			_codes.Add("-.", "N");
-			_codes.Add("O", "---");
+			_codes.Add("---", "O");
 
 			_codes.Add(".--.", "P");
 			_codes.Add("--.-", "Q");
@@ -92,6 +90,8 @@ namespace Main.Codewars
 			_codes.Add("---..", "8");
 			_codes.Add("----.", "9");
 			_codes.Add("-----", "0");
+
+			_codes.Add(".-.-.-", ",");
 		}
 
 		public static string Get(string morseCode)

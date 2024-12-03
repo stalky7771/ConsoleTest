@@ -8,7 +8,8 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			Combinatorics.TestAll();
+			//Evaluation.TestAll();
+			Parser.TestAll();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
