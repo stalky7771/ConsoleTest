@@ -15,7 +15,7 @@ namespace Main.Codewars
 		public double eval_exp(string str)
 		{
 			double result = 0;
-			_expression = str.Replace(" ", "");
+			_expression = str.Replace(" ", "").Replace("---", "-").Replace("&-", "^").ToLower();
 			get_token();
 			eval_exp2(ref result);
 			return result;
@@ -44,7 +44,7 @@ namespace Main.Codewars
 			string op;
 			double temp = 0;
 
-			eval_exp5(ref result);
+			eval_exp4(ref result);
 			while ((op = _token) == "*" || op == "/")
 			{
 				get_token();
@@ -54,19 +54,6 @@ namespace Main.Codewars
 					case "*": result *= temp; break;
 					case "/": result /= temp; break;
 				}
-			}
-		}
-
-		void eval_exp5(ref double result)
-		{
-			double temp = 0;
-
-			eval_exp6(ref result);
-			if (_token == "&")
-			{
-				get_token();
-				eval_exp5(ref temp);
-				result = System.Math.Pow(result, temp);
 			}
 		}
 
@@ -82,6 +69,20 @@ namespace Main.Codewars
 			eval_exp5(ref result);
 			if (op == "-")
 				result = -result;
+		}
+
+		void eval_exp5(ref double result)
+		{
+			double temp = 0;
+
+			eval_exp6(ref result);
+			if (_token == "&" || _token == "^")
+			{
+				var t = _token;
+				get_token();
+				eval_exp5(ref temp);
+				result = t == "&" ? System.Math.Pow(result, temp) : 1 / System.Math.Pow(result, temp);
+			}
 		}
 
 		void eval_exp6(ref double result)
@@ -121,29 +122,31 @@ namespace Main.Codewars
 			if (_index == _expression.Length)
 				return;
 
-			if ("+-*/&()".Contains(_exp_ptr))
+			if (IsOperator(_exp_ptr))
 			{
 				_tok_type = LexType.Operator;
 				_token = _exp_ptr;
 				_index++;
 			}
-			else if ("0123456789,".Contains(_exp_ptr))
+			else if ("0123456789,e".Contains(_exp_ptr))
 			{
 				_tok_type = LexType.Number;
-				while (!isdelim(_exp_ptr))
+				bool isExponent = false;
+				while (isExponent && (_exp_ptr == "-" || _exp_ptr == "+") || !IsOperator(_exp_ptr))
 				{
+					isExponent = _exp_ptr == "e";
+
 					_token += _exp_ptr;
 					_index++;
 					if (_index == _expression.Length)
 						break;
 				}
 			}
-			//Console.WriteLine($">>> GetToken {_token} - {_tok_type}");
 		}
 
-		bool isdelim(string c)
+		bool IsOperator(string c)
 		{
-			return "+-/*&()".Contains(c);
+			return "+-/*&^()".Contains(c);
 		}
 
 		public static void TestAll()
@@ -156,11 +159,12 @@ namespace Main.Codewars
 			//Test("-6+5", "-1");
 			//Test("6-5", "1");
 			//Test("-2+2", "0");
-			Test("-2&2", "-4");
+			//Test("-2&2", "-4");
 			//Test("2&0", "1");
 			//Test("---5*2", "-10");
 			//Test("0,01*4", "0,04");
 			//Test("((2 + 3) * (1 + 2)) * 4 & -2", "0,9375");
+			//Test("4 & -2", "0,0625");
 			//Test("10 * 5 + 2&3", "58");
 			//Test("2 * 3 + 2 & 2 * 4", "22");
 			//Test("5-- 6", "11");
@@ -168,6 +172,9 @@ namespace Main.Codewars
 			//Test("2*3&2", "18");
 			//Test("4 & 3 & 2", "262144");
 			//Test("-5&3&2*2-1", "-3906251");
+			//Test("1E-2&2", "0,0001");
+			//Test("1e+2 - 20", "80");
+			Test("-1e-1 * 5", "-0,5");
 		}
 
 		public static void Test(string expression, string expected)
