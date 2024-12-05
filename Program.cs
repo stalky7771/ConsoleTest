@@ -8,7 +8,8 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			Evaluate.TestAll();
+			//Primes.TestAll();
+			Primes.TestAll();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
