@@ -8,8 +8,7 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			//Evaluation.TestAll();
-			Parser.TestAll();
+			Evaluate.TestAll();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
