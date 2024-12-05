@@ -8,8 +8,7 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			//Primes.TestAll();
-			Primes.TestAll();
+			NarcissisticNumber.TestAll();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
