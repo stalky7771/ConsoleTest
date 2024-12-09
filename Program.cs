@@ -8,7 +8,7 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			Battleship.Test();
+			BinomialExpansion.TestAll();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
