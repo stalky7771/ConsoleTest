@@ -1,4 +1,5 @@
 ﻿//https://www.codewars.com/kata/5519a584a73e70fa570005f5/train/csharp
+//https://habr.com/ru/articles/526924/
 
 using System.Collections;
 using System.Collections.Generic;

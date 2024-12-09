@@ -8,7 +8,7 @@ namespace Main
 		{
 			Console.WriteLine(">>> START");
 
-			NarcissisticNumber.TestAll();
+			Battleship.Test();
 
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();

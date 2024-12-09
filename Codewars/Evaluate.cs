@@ -1,5 +1,7 @@
 ﻿//https://www.codewars.com/kata/564d9ebde30917684f000048/train/csharp
 
+using System.Diagnostics;
+
 namespace Main.Codewars
 {
 	public class Evaluate
@@ -309,6 +311,29 @@ namespace Main.Codewars
 				result = "ERROR";
 
 			Console.WriteLine(result == expected ? "OK" : $"FAIL {expression}");
+		}
+	}
+
+	// using Python
+	public class Evaluate2
+	{
+		public static string eval(string expression)
+		{
+			try
+			{
+				expression = expression.ToLower().Replace("&", "**");
+				ProcessStartInfo procStartInfo = new ProcessStartInfo("python", "-c \"from math import *; r=" + expression + "; print(r if r<1e14 else '{0:.12e}'.format(r))\"");
+				procStartInfo.RedirectStandardOutput = true;
+				procStartInfo.RedirectStandardError = true;
+				procStartInfo.UseShellExecute = false;
+				procStartInfo.CreateNoWindow = true;
+				Process proc = new Process();
+				proc.StartInfo = procStartInfo;
+				proc.Start();
+				string result = proc.StandardOutput.ReadToEnd();
+				return result == "" ? "ERROR" : result.Trim();
+			}
+			catch (Exception e) { Console.WriteLine(e.ToString()); return "ERROR"; }
 		}
 	}
 }
