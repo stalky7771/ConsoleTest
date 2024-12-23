@@ -1,4 +1,5 @@
-﻿using Main.Codewars;
+﻿using System.Security.Cryptography.X509Certificates;
+using Main.Codewars;
 
 namespace Main
 {
@@ -7,9 +8,7 @@ namespace Main
 		static void Main(string[] args)
 		{
 			Console.WriteLine(">>> START");
-
-			BinomialExpansion.TestAll();
-
+			TicTacToe.TestAll();
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
 		}
