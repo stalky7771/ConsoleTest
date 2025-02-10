@@ -1,8 +1,10 @@
-﻿using System.Text;
+﻿//https://www.codewars.com/kata/54b724efac3d5402db00065e
+
+using System.Text;
 
 namespace Main.Codewars
 {
-	public class MorseCodeDecoder
+	public class MorseCodeDecoder1
 	{
 		private const string SPACE = " ";
 		private const string SPACE_LONG = "   ";

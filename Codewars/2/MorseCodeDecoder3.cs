@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿//https://www.codewars.com/kata/54acd76f7207c6a2880012bb
+
+using System.Text;
 
 namespace Main.Codewars
 {
