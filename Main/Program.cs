@@ -1,4 +1,6 @@
 ﻿using Main.Codewars._3;
+using Main.Codewars._5;
+using System.IO;
 
 namespace Main
 {
@@ -7,10 +9,7 @@ namespace Main
 		static void Main(string[] args)
 		{
 			Console.WriteLine(">>> START");
-
-			RailFenceCipher.EncodeSampleTests();
-			RailFenceCipher.DecodeSampleTests();
-
+			LastDigit.TestAll();
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
 		}
