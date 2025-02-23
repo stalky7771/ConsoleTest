@@ -1,8 +1,8 @@
 ﻿//https://www.codewars.com/kata/561c20edc71c01139000017c/train/csharp
 
 using System;
+using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Main.Codewars._4
 {
