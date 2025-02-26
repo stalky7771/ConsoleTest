@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace Main.Math
+﻿namespace Main.Math
 {
-	public class MathResearch
+	public class Permutations
 	{
 		public static void PrintPermutations(char[] a, int i, int n)
 		{
@@ -35,7 +32,7 @@ namespace Main.Math
 
 		public static void PermutationsExample()
 		{
-			char[] a = "1234".ToCharArray();
+			char[] a = "123".ToCharArray();
 			PrintPermutations(a, 0, a.Length - 1);
 		}
 	}

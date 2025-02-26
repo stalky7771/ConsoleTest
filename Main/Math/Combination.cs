@@ -54,9 +54,13 @@
 
 		public static void СombinationsExample()
 		{
-			int[] arr = { 1, 2, 3, 4, 5 };
+			//int[] arr = { 1, 2, 3, 4, 5 };
+			//int[] arr = { 1, 2, 3, 4, 5 };
+			//int[] arr = { 0, 1, 6, 8, 9};
+			int[] arr = { 0, 1, 6, 8, 9, 0};
+			//var a = "01689".ToCharArray();
 			//int[] arr = { 3, 4, 5, 5, 6, 6, 7, 7, 7, 8, 8, 9, 9, 10, 11 };
-			int r = 3;
+			int r = 2;
 			int n = arr.Length;
 			PrintCombination(arr, n, r);
 		}

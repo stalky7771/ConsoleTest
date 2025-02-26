@@ -12,7 +12,10 @@ namespace Main
 		static void Main(string[] args)
 		{
 			Console.WriteLine(">>> START");
-			StringTops.TestAll();
+			//UpsideDownNumbers.TestAll();
+			//Combination.СombinationsExample();
+			//Permutations.PermutationsExample();
+			UpsideDownNumbers.TestAll();
 			Console.WriteLine(">>> FINISH");
 			Console.ReadLine();
 		}
