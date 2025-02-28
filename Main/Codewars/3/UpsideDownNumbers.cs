@@ -26,6 +26,11 @@ namespace Main.Codewars._3
 
 		public static void TestAll()
 		{
+			//var counter = new UpsideDownNumbersCounter();
+			////var result = counter.CalcTopUpsideDownNumber("12345678900000000");
+			//var result = counter.CalcTopUpsideDownNumber("99999999900000001");
+			//return;
+
 			//var max = "10";
 			//var min = "1";
 			//for (var i = 3; i < 12; i++)
@@ -51,18 +56,19 @@ namespace Main.Codewars._3
 			//Test("6", "25", 2);
 			//Test("10", "100", 4);
 			//Test("100", "1000", 12);
-			//Test("100000", "12345678900000000", 718650);
-			//Test("1681816969181891", "8729534742494453", 161461);
-			//Test("10000000000", "10000000000000000000000", 78120000);
-			//Test("900689689006", "133586245546987379633", 17946806);
-			//Test("160880916088091", "180910686989016081", 1664955);
-			//Test("93445505661", "9860889161916880986", 7433198);
+			Test("100000", "12345678900000000", 718650);
+			Test("100000", "11999999866666611", 718650);
+			Test("1681816969181891", "8729534742494453", 161461);
+			Test("900689689006", "133586245546987379633", 17946806);
+			Test("160880916088091", "180910686989016081", 1664955);
+			Test("93445505661", "9860889161916880986", 7433198);
 
-			Stopwatch stopWatch = new Stopwatch();
-			stopWatch.Start();
-			Test("8698", "64365925465732689127799", 119140593);
-			stopWatch.Stop();
-			Console.WriteLine($"time: {stopWatch.Elapsed.TotalSeconds}");
+			//Stopwatch stopWatch = new Stopwatch();
+			//stopWatch.Start();
+			//Test("8698", "64365925465732689127799", 119140593);
+			////Test("1000", "8698", 13);
+			//stopWatch.Stop();
+			//Console.WriteLine($"time: {stopWatch.Elapsed.TotalSeconds}");
 		}
 	}
 
@@ -76,7 +82,6 @@ namespace Main.Codewars._3
 		private BigInteger _count;
 		private bool _isFinished;
 
-		private readonly Dictionary<int, double> _cache = new();
 		private readonly Dictionary<double, BigInteger> _pows = new();
 
 		BigInteger GetFastPow(int n)
@@ -95,19 +100,32 @@ namespace Main.Codewars._3
 			_max = BigInteger.Parse(y);
 			BigInteger result = 0;
 
-			var maxN = (int)(System.Math.Ceiling(BigInteger.Log10(_max)));
-			var left = BigInteger.Pow(10, maxN) == _max ? maxN : maxN - 1;
+			var minN = x.Length;
+			var right = BigInteger.Pow(10, minN - 1) == _min ? minN : minN + 1;
 
-			var minN = _min > 10 ? (int)(System.Math.Floor(BigInteger.Log10(_min))) : 1;
-			var right = BigInteger.Pow(10, minN) == _min ? minN : minN + 1;
+			var maxN = y.Length;
+			var left = BigInteger.Pow(10, maxN - 1) == _max ? maxN : maxN - 1;
 
+			right = System.Math.Min(left, right);
 			right = System.Math.Max(right, 4);
 
-			for (var n = maxN; n > 0; n--)
+			if (maxN < 5)
+			{
+				for (var n = maxN; n > 0; n--)
+				{
+					if (n % 2 == 0)
+						CalculateEvenPow(n, n - 1, result);
+					else
+						CalculateOddPow(n + 1, n, result);
+				}
+				return (double)_count;
+			}
+
+			for (var n = maxN; n >= right - 1; n--)
 			{
 				if (left >= n && n > right)
 				{
-					_count += new BigInteger(Fast(n) - Fast(n - 1));
+					_count += new BigInteger(Fast(n));
 					continue;
 				}
 
@@ -214,11 +232,14 @@ namespace Main.Codewars._3
 					: 6;
 		}
 
+
 		public double Fast(int n)
 		{
-			if (_cache.ContainsKey(n))
-				return _cache[n];
+			return CalcFast(n) - CalcFast(n - 1);
+		}
 
+		public double CalcFast(int n)
+		{
 			switch (n)
 			{
 				case 0: return 1;
@@ -227,15 +248,233 @@ namespace Main.Codewars._3
 				case 3: return 19;
 			}
 
-			double c = 20;
+			double x = 20;
 			for (var i = 4; i <= n; i++)
+				x = i % 2 == 0 ? 2 * x : 2.5 * x;
+
+			return x - 1;
+		}
+
+		private bool IsUpsideDownNumber(int i, bool isMediumColumn = false)
+		{
+			return isMediumColumn
+				? i == 0 || i == 1 || i == 8
+				: i == 0 || i == 1 || i == 6 || i == 8 || i == 9;
+		}
+
+		private int GetNearMaxUpsideDownNumber(int i, bool isMediumColumn = false)
+		{
+			if (isMediumColumn)
 			{
-				c = i % 2 == 0 ? 2 * c : 2.5 * c;
+				if (i == 9)
+					return 0;
+
+				if (i == 7 || i == 6 || i == 5 || i == 4 || i == 3 || i == 2)
+					return 8;
+
+			}
+			if (i == 7)
+				return 9;
+
+			if (i == 5 || i == 4 || i == 3 || i == 2)
+				return 6;
+
+			return 9;
+		}
+
+		private int Base5System(int i)
+		{
+			switch (i)
+			{
+				case 9: return 4;
+				case 8: return 3;
+				case 6: return 2;
+				case 1: return 1;
+				default: return 0;
+			}
+		}
+
+		private int Base3System(int i)
+		{
+			switch (i)
+			{
+				case 8: return 3;
+				case 1: return 1;
+				default: return 0;
+			}
+		}
+
+		private double GetAmount(int[] arr)
+		{
+			double res = 0;
+			
+			for (var i = 0; i < arr.Length; i++)
+			{
+				var x = Base5System(arr[i]);
+				
+				if(i == 0)
+					x--;
+
+				res += x * System.Math.Pow(5, arr.Length - i - 1);
+			}
+			return res;
+		}
+
+		private int GetNearMinUpsideDownNumber(int i, bool isMediumColumn = false)
+		{
+			if (isMediumColumn)
+			{
+				if (i == 9)
+					return 8;
+
+				if (i == 7 || i == 6 || i == 5 || i == 4 || i == 3 || i == 2)
+					return 1;
+
+			}
+			if (i == 7)
+				return 6;
+
+			if (i == 5 || i == 4 || i == 3 || i == 2)
+				return 1;
+
+			return 1;
+		}
+
+		public Dictionary<char, char> dictToLowerUDN = new()
+		{
+			{ '9', '9' }, { '8', '8' }, { '7', '6' }, { '6', '6' }, { '5', '1' },
+			{ '4', '1' }, { '3', '1' }, { '2', '1' }, { '1', '1' }, { '0', '0' },
+		};
+
+		public Dictionary<char, char> dictMediumNumberToLowerUDN = new()
+		{
+			{ '9', '8' }, { '8', '8' }, { '7', '1' }, { '6', '1' }, { '5', '1' },
+			{ '4', '1' }, { '3', '1' }, { '2', '1' }, { '1', '1' }, { '0', '0' },
+		};
+
+		public Dictionary<char, char> dictNumberRotation = new()
+		{
+			{ '9', '6' }, { '8', '8' }, { '6', '9' }, { '1', '1' }, { '0', '0' }
+		};
+
+		public double CalcTopUpsideDownNumber(string str)
+		{
+			var size = str.Length / 2;
+
+			var mediumNumber = char.MinValue;
+			if (str.Length % 2 != 0)
+			{
+				mediumNumber = dictMediumNumberToLowerUDN[str[size]];
 			}
 
-			var result = c - 1;
-			_cache.Add(n, result);
-			return result;
+			var leftNumber = str.Take(size).ToArray();
+			var leftNumberOut = Enumerable.Repeat('9', leftNumber.Length).ToArray();
+
+			var isNumberChanged = false;
+			for (var i = 0; i < leftNumber.Length; i++)
+			{
+				leftNumberOut[i] = dictToLowerUDN[leftNumber[i]];
+				if (leftNumber[i] != leftNumberOut[i])
+				{
+					if (mediumNumber != char.MinValue)
+						mediumNumber = '8';
+
+					isNumberChanged = true;
+					break;
+				}
+			}
+
+			var left = new string(leftNumberOut);
+
+			if (isNumberChanged == false)
+			{
+				var leftRotatedNumber = "";
+				foreach (var c in leftNumberOut)
+				{
+					leftRotatedNumber += dictNumberRotation[c];
+				}
+				//Convert.ToInt32(value, 16));
+
+				var rightNumber = new string(str.Reverse().Take(size).Reverse().ToArray());
+
+				if (double.Parse(leftRotatedNumber) > double.Parse(rightNumber))
+				{
+					int xxx = 0;
+				}
+				else
+				{
+					int xxx = 0;
+				}
+			}
+
+			int a = 0;
+			return 0;
+
+			//for (var i = 0; i < inArray.Length; i++)
+			//{
+			//	var number = inArray[i];
+			//	if (IsUpsideDownNumber(number))
+			//	{
+			//		outArray[i] = inArray[i];
+			//	}
+			//	else
+			//	{
+			//		outArray[i] = GetNearMinUpsideDownNumber(number);
+			//		mediumNumber = 8;
+			//		break;
+			//	}
+			//}
+
+			//var amount = GetAmount(outArray);
+			//amount++;
+
+			//if (mediumNumber != -1)
+			//{
+			//	amount = (amount - 1) * 3 + Base3System(mediumNumber);
+			//}
+
+			//return amount;
+		}
+
+		public double CalcMin(string str)
+		{
+			var size = str.Length / 2;
+
+			var mediumNumber = -1;
+			if (str.Length % 2 != 0)
+			{
+				mediumNumber = (int)char.GetNumericValue(str[size]);
+				if (IsUpsideDownNumber(mediumNumber, true) == false)
+					mediumNumber = GetNearMaxUpsideDownNumber(mediumNumber, true);
+			}
+
+			var inArray = Array.ConvertAll(str.Take(size).ToArray(), c => (int)char.GetNumericValue(c));
+			var outArray = Enumerable.Repeat(9, inArray.Length).ToArray();
+
+			for (var i = 0; i < inArray.Length; i++)
+			{
+				var number = inArray[i];
+				if (IsUpsideDownNumber(number))
+				{
+					outArray[i] = inArray[i];
+				}
+				else
+				{
+					outArray[i] = GetNearMaxUpsideDownNumber(number);
+					mediumNumber = 0;
+					break;
+				}
+			}
+
+			var amount = GetAmount(outArray);
+			amount++;
+
+			if (mediumNumber != -1)
+			{
+				amount = (amount - 1) * 3 + Base3System(mediumNumber);
+			}
+
+			return amount;
 		}
 	}
 }
