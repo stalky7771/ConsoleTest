@@ -28,15 +28,30 @@ namespace Main.Codewars._3
 		{
 			var tokens = new List<string>();
 			string number = "";
+			char? prev = null;
 
-			foreach (char c in expr)
+			for (int i = 0; i < expr.Length; i++)
 			{
+				char c = expr[i];
+
+				if (char.IsWhiteSpace(c))
+					continue;
+
+				// Число (возможно с точкой)
 				if (char.IsDigit(c) || c == '.')
 				{
 					number += c;
 				}
-				else if ("+-*/()^".Contains(c))
+				// Обработка + или - как знака числа
+				else if ((c == '+' || c == '-') &&
+				         (prev == null || "+-*/(^".Contains(prev.Value)))
 				{
+					// Это знак числа, а не оператор
+					number += c;
+				}
+				else if ("+-*/()".Contains(c))
+				{
+					// Завершаем текущее число, если есть
 					if (number != "")
 					{
 						tokens.Add(number);
@@ -44,14 +59,12 @@ namespace Main.Codewars._3
 					}
 					tokens.Add(c.ToString());
 				}
-				else if (char.IsWhiteSpace(c))
+				else
 				{
-					if (number != "")
-					{
-						tokens.Add(number);
-						number = "";
-					}
+					throw new Exception($"Недопустимый символ: {c}");
 				}
+
+				prev = c;
 			}
 
 			if (number != "")
@@ -137,6 +150,8 @@ namespace Main.Codewars._3
 		public static void TestAll()
 		{
 			//var res = Calculate("(2 / (2 + 3.33) * 4) - -6");
+			var res = Calculate("-7 * -(6 / 3)");
+			return;
 
 			Test("3 + 5 * (2 - 1)", 8);
 			Test("1 + 2", 3);
